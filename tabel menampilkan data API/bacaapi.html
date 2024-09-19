@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menampilkan Alamat dari API</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        h1{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Menampilkan Data Pengguna dari API</h1>
+    <table id="userTable">
+        <tr>
+            <th>Nama</th>
+            <th>Umur</th>
+            <th>Jenis Kelamin</th>
+            <th>Tanggal lahir</th>
+            <th>Alamat Lengkap</th>
+        </tr>
+    </table>
+
+    <script>
+        // Fungsi untuk mengambil data dari API
+        fetch('https://dummyjson.com/users?limit=10')
+            .then(response => response.json())
+            .then(data => {
+                const users = data.users; // Ambil array 'users' dari hasil API
+                const table = document.getElementById('userTable'); // Tabel untuk menampilkan data
+
+                // Loop melalui data pengguna
+                users.forEach(user => {
+                    // Ambil nama dan alamat
+                    const NamaLengkap = `${user.firstName} ${user.lastName}`;
+                    const Umur = `${user.age}` + ` Tahun`;
+                    const JenKel = `${user.gender}`;
+                    const TTL = `${user.birthDate}`;
+                    const Alamat = `${user.address.address}, ${user.address.city}, ${user.address.state} ${user.address.postalCode}, ${user.address.country}`;
+
+                    // Buat baris tabel
+                    const row = `
+                        <tr>
+                            <td>${NamaLengkap}</td>
+                            <td>${Umur}</td>
+                            <td>${JenKel}</td>
+                            <td>${TTL}</td>
+                            <td>${Alamat}</td>
+                        </tr>
+                    `;
+
+                    // Tambahkan baris ke dalam tabel
+                    table.innerHTML += row;
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+</body>
+</html>
